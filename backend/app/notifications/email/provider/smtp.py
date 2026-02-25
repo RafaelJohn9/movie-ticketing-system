@@ -69,7 +69,12 @@ class SMTPProvider(EmailProvider):
 
     def _send_via_smtp(self, msg: MIMEMultipart, to: str) -> None:
         """Blocking SMTP send — called from thread."""
-        with smtplib.SMTP(self.smtp_server, self.smtp_port) as server:
-            server.starttls()
-            server.login(self.username, self.password)
-            server.send_message(msg, to_addrs=[to])
+        if self.smtp_port == 465:
+            with smtplib.SMTP_SSL(self.smtp_server, self.smtp_port) as server:
+                server.login(self.username, self.password)
+                server.send_message(msg, to_addrs=[to])
+        else:
+            with smtplib.SMTP(self.smtp_server, self.smtp_port) as server:
+                server.starttls()
+                server.login(self.username, self.password)
+                server.send_message(msg, to_addrs=[to])
