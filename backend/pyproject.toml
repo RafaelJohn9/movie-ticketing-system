@@ -61,7 +61,7 @@ dependencies = [
 
 [tool.hatch.envs.default.scripts]
 # Run the dev server (adjust path to your app)
-app = "uvicorn main:app --reload --port 8001"
+app = "uvicorn main:app --reload --port 8000"
 admin = "uvicorn admin:app --reload --port 8001"
 
 # Quality checks
