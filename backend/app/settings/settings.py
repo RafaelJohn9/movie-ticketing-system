@@ -8,7 +8,7 @@ class Settings(BaseSettings):
 
     # Core
     database_url: str
-    jwt_secret_key: str
+    jwt_secret_key: str="supersecretkey"
 
     # Environment
     environment: str = "development"
@@ -30,7 +30,7 @@ class Settings(BaseSettings):
     mpesa_shortcode: str
     mpesa_passkey: str
     mpesa_callback_url: str = (
-        "http://localhost:8000/api/v1/payments"
+        "http://localhost:8000/payments"
     )
     mpesa_environment: str = "sandbox"  # or "production"
 
