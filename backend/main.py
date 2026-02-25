@@ -8,11 +8,20 @@ from app.core.logging import get_logger
 from app.db import engine
 from app.models.base import Base
 from app.api.v1.tickets import ticket_router
+from fastapi.middleware.cors import CORSMiddleware
 
 # Get configured logger
 logger = get_logger(__name__)
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],  # your React dev server, e.g. Vite
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Register the global exception handler
 app.add_exception_handler(AppException, app_exception_handler)
