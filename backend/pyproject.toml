@@ -1,0 +1,180 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "MovieTickettingSystem"
+version = "0.1.0"
+description = "Moving Ticketting System for a CU event."
+authors = [{ name = "John Mwangi Kagunda", email = "john@kagunda.dev" }]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.115.11",
+    "sqlalchemy>=2.0.46",
+    "bcrypt>=4.3.0",
+    "pyjwt>=2.10.1",
+    "pydantic>=2.10.6",
+    "pydantic-settings>=2.8.1",
+    "pytz>=2025.1",
+    "email-validator>=2.2.0",
+    "gunicorn>=23.0.0",
+    "uvicorn>=0.34.0",
+    "python-dateutil>=2.9.0.post0",
+    "mpesakit>=2.0.1",
+    "redis>=5.2.1",
+    "jinja2>=3.1.5",
+    "segno>=1.6.6"
+]
+
+[project.optional-dependencies]
+dev = [
+  "hatchling==1.27.0",
+  "hatch==1.14.1",
+  "ruff==0.9.10",
+  "mypy==1.15.0",
+  "bandit==1.8.6",
+  "pytest==8.3.5",
+  "pytest-cov>=4.1.0",
+  "coverage[toml]>=7.3.0",
+  "pip-audit==2.9.0",
+  "httpx==0.27.2",     # for API tests
+  "pytest-asyncio>=0.21.0",
+  "radon==6.0.1",
+  "vulture==2.14",
+  "types-pytz>=2025.2.0.20251108",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+
+[tool.hatch.envs.default]
+installer = "uv"
+dependencies = [
+    "ruff",
+    "mypy",
+    "bandit",
+    "pytest",
+    "coverage[toml]",
+]
+
+[tool.hatch.envs.default.scripts]
+# Run the dev server (adjust path to your app)
+app = "uvicorn main:app --reload --port 8001"
+admin = "uvicorn admin:app --reload --port 8001"
+
+# Quality checks
+lint = "ruff check ."
+docs = "ruff check --select D ."
+format = "ruff format ."
+format-check = "ruff format --check ."
+type-check = "mypy ."
+security = "bandit -r ."
+radon-cc = "radon cc app --min C --show-closures"
+radon-mi = "radon mi app --min 70"
+check-dead-code = "vulture app --min-confidence 70"
+fix = ["format", "lint --fix"]
+quality = ["lint", "type-check", "security", "format-check", "docs"]
+
+
+# Testing
+test = "pytest tests"
+test-cov = "pytest --cov=src --cov-report=term-missing --cov-fail-under=90"
+
+# All checks
+check = ["quality", "test"]
+
+[tool.ruff]
+line-length = 80
+target-version = "py310"
+
+[tool.ruff.lint]
+# Enable recommended rules + select useful ones
+select = [
+    "D",   # pydocstyle
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "TID", # flake8-tidy-imports
+    "UP",  # pyupgrade
+    "SIM", # flake8-simplify
+    "ARG", # flake8-unused-arguments
+]
+ignore = [
+    "B008",  # Do not perform function calls in argument defaults (false positive in FastAPI)
+    "D107",  # Missing docstring in __init__
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["backend_service"]  # replace with your package name
+combine-as-imports = true
+force-sort-within-sections = true
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+
+[tool.mypy]
+python_version = "3.12"
+# strict = true
+warn_unused_configs = true
+disallow_any_generics = true
+disallow_subclassing_any = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_return_any = true
+show_error_codes = true
+# Disable error codes
+disable_error_code = []
+
+[tool.bandit]
+targets = ["."]
+exclude_dirs = ["tests", "venv", ".venv", "dist", "build"]
+# Optionally set confidence level: "LOW", "MEDIUM", "HIGH"
+# confidence = "MEDIUM"
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--strict-markers",
+    "--tb=short",
+    "--cov=app",               # assuming your code is in ./src
+    "--cov-report=term-missing",
+    "--cov-report=html",
+    # "--cov-fail-under=99",     # enforce 99% coverage
+]
+filterwarnings = [
+    "error",
+    "ignore::DeprecationWarning",  # adjust as needed
+]
+
+[tool.coverage.run]
+source = ["src"]
+omit = ["*/tests/*", "*/venv/*", "*/.venv/*"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+]
