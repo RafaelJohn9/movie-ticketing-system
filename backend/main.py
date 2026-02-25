@@ -17,7 +17,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # your React dev server, e.g. Vite
+    allow_origins=["http://localhost:5173", "https://rafaeljohn9.github.io/movie-ticketing-system"],  # your React dev server, e.g. Vite
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
