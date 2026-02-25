@@ -30,7 +30,7 @@ logger = get_logger(__name__)
 # ---------------------------------------------------------------------------
 
 TICKET_PRICES: dict[TicketType, int] = {
-    TicketType.REGULAR: 1,
+    TicketType.REGULAR: 100,
     TicketType.VIP: 200,
     TicketType.GROUP: 400,
 }
