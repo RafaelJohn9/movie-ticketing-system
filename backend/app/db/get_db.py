@@ -9,7 +9,7 @@ from app.settings import settings
 
 DATABASE_URL = settings.database_url
 
-# Create the SQLAlchemy engine
+# Create the SQLAlchemy engine.
 engine = create_engine(
     DATABASE_URL,
     connect_args={"check_same_thread": False}
@@ -17,11 +17,11 @@ engine = create_engine(
     else {},
 )
 
-# Create a configured "Session" class
+# Create a configured "Session" class.
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
-# Dependency to get a database session
+# Dependency to get a database session.
 def get_db() -> Generator[Session, None, None]:
     """Provide a database session to API routes."""
     db = SessionLocal()
