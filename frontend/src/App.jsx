@@ -3,7 +3,7 @@ import { useState, useRef } from "react";
 // ─────────────────────────────────────────────────────────────────────────────
 // CONFIG
 // ─────────────────────────────────────────────────────────────────────────────
-const BASE_URL = "http://localhost:8001";
+const BASE_URL = "https://cu-ticketing-backend-640770b799c4.herokuapp.com";
 
 const api = {
   buyTicket: (data) =>
@@ -26,7 +26,7 @@ const api = {
 const TICKET_TYPES = [
   { value: "Regular", label: "Regular", price: "KES 100", desc: "Standard event access",        badge: "badge-regular" },
   { value: "VIP",     label: "VIP",     price: "KES 200", desc: "Premium seating & VIP lounge", badge: "badge-vip"     },
-  { value: "Group",   label: "Group",   price: "KES 400", desc: "Group of 4 — best value deal", badge: "badge-group"   },
+  { value: "Group",   label: "Group",   price: "KES 400", desc: "Group of 5 — best value deal", badge: "badge-group"   },
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
