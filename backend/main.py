@@ -43,7 +43,7 @@ async def health_check() -> dict[str, str]:
 
 
 # Create all tables if they do not exist
-# Base.metadata.create_all(bind=engine, checkfirst=True)  # type: ignore
+Base.metadata.create_all(bind=engine, checkfirst=True)  # type: ignore
 
 
 @app.on_event("startup")
