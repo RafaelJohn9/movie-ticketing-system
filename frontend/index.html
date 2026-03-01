@@ -5,6 +5,15 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MUTCU Tickets – Film Premiere</title>
+    <!-- Decode path encoded by 404.html before React boots -->
+    <script>
+      (function () {
+        var p = new URLSearchParams(window.location.search).get('p');
+        if (p) {
+          window.history.replaceState(null, '', '/' + decodeURIComponent(p));
+        }
+      })();
+    </script>
     <meta name="description" content="Get your ticket for the MUTCU Film Premiere at Murang'a University of Technology" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

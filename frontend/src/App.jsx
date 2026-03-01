@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
 import HomePage from './pages/HomePage'
@@ -14,41 +14,36 @@ const PUBLIC_PAGES = {
   send: SendTicketPage,
 }
 
+/** Strip the GH Pages repo prefix, then return the bare path segment */
+function getInitialPage() {
+  const path = window.location.pathname
+    .replace(/^\/movie-ticketing-system/, '')  // strip repo prefix
+    .replace(/^\//, '')                         // strip leading slash
+    .split('/')[0]                              // first segment only
+  if (path === 'admin') return 'admin'
+  return path || 'home'
+}
+
 function AppInner() {
-  const { isAdmin, signOut } = useAdminAuth()
-
-  // Detect /admin path on initial load
-  const startsOnAdmin = window.location.pathname
-    .replace(/^\/movie-ticketing-system/, '')
-    .startsWith('/admin')
-
-  const [page, setPage] = useState(startsOnAdmin ? 'admin' : 'home')
-
-  // Keep URL in sync (hash-style for GH Pages compat)
-  useEffect(() => {
-    const onPop = () => {
-      const path = window.location.hash.replace('#', '') || '/'
-      if (path.startsWith('/admin')) setPage('admin')
-      else setPage(path.replace('/', '') || 'home')
-    }
-    window.addEventListener('popstate', onPop)
-    return () => window.removeEventListener('popstate', onPop)
-  }, [])
+  const { isAdmin } = useAdminAuth()
+  const [page, setPage] = useState(getInitialPage)
 
   const navigate = (id) => {
     setPage(id)
+    // Update URL without triggering a server round-trip
+    const base = '/movie-ticketing-system'
+    const path = id === 'home' ? base + '/' : base + '/' + id
+    window.history.pushState(null, '', path)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  // ── Admin route ──────────────────────────────────────────────────────────
+  // ── Admin route ────────────────────────────────────────────────────────
   if (page === 'admin') {
-    if (!isAdmin) {
-      return <AdminLoginPage onSuccess={() => setPage('admin')} />
-    }
-    return <AdminDashboardPage />
+    if (!isAdmin) return <AdminLoginPage onSuccess={() => setPage('admin')} />
+    return <AdminDashboardPage onNavigate={navigate} />
   }
 
-  // ── Public routes ────────────────────────────────────────────────────────
+  // ── Public routes ──────────────────────────────────────────────────────
   const PageComponent = PUBLIC_PAGES[page] || HomePage
 
   return (
