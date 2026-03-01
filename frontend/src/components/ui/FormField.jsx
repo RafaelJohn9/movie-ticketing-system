@@ -1,3 +1,5 @@
+import { forwardRef } from 'react'
+
 export default function FormField({ label, hint, className = '', children }) {
   return (
     <div className={`mb-4 ${className}`}>
@@ -14,9 +16,10 @@ export default function FormField({ label, hint, className = '', children }) {
   )
 }
 
-export function Input({ className = '', ...props }) {
+export const Input = forwardRef(function Input({ className = '', ...props }, ref) {
   return (
     <input
+      ref={ref}
       className={[
         'w-full px-3.5 py-3 rounded-xl text-base text-white',
         'bg-white/5 border border-white/10 outline-none',
@@ -28,4 +31,4 @@ export function Input({ className = '', ...props }) {
       {...props}
     />
   )
-}
+})
