@@ -55,16 +55,16 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     logger.info("Application startup initiated.")
 
     try:
-        with engine.connect() as connection:
-            logger.info("Database connection established.")
+        # with engine.connect() as connection:
+        #     logger.info("Database connection established.")
 
-            inspector = inspect(connection)
+        #     inspector = inspect(connection)
 
-            if not inspector.get_table_names():
-                Base.metadata.create_all(bind=engine)
-                logger.info("Database tables created.")
-            else:
-                logger.info("Database tables already exist.")
+        #     if not inspector.get_table_names():
+        #         Base.metadata.create_all(bind=engine)
+        #         logger.info("Database tables created.")
+        #     else:
+        #         logger.info("Database tables already exist.")
 
         db = next(get_db())
         await create_admin_user(db)
