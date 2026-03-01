@@ -77,6 +77,10 @@ class ResourceAlreadyExistsError(ConflictError):
 
     pass
 
+class QRCodeAlreadyScannedError(ConflictError):
+    """QR code has already been scanned."""
+
+    pass
 
 class ResourceDeletedError(NotFoundError):
     """Requested resource has been deleted."""

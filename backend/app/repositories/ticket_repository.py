@@ -21,7 +21,7 @@ class TicketRepository:
     @staticmethod
     async def get_by_id(db: Session, ticket_id: str) -> Ticket | None:
         """Retrieve a ticket by its ID."""
-        return db.query(Ticket).filter(Ticket.ticket_number == ticket_id).first()
+        return db.query(Ticket).filter(Ticket.id == ticket_id).first()
 
     @staticmethod
     async def get_by_qr_token(db: Session, qr_token: str) -> Ticket | None:
@@ -34,6 +34,17 @@ class TicketRepository:
         ticket = await TicketRepository.get_by_id(db, ticket_id)
         if ticket:
             ticket.status = new_status
+            db.commit()
+            db.refresh(ticket)
+        return ticket
+
+    @staticmethod
+    async def update(db: Session, ticket_id: str, **kwargs) -> Ticket | None:
+        """Update a ticket with the provided data."""
+        ticket = await TicketRepository.get_by_id(db, ticket_id)
+        if ticket:
+            for key, value in kwargs.items():
+                setattr(ticket, key, value)
             db.commit()
             db.refresh(ticket)
         return ticket

@@ -1,12 +1,14 @@
 """Concrete SMTP email provider implementation."""
 
 import asyncio
+from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from functools import partial
 import smtplib
-from email.mime.image import MIMEImage
+
 from app.settings import settings
+
 from .base import EmailProvider
 
 
@@ -33,7 +35,6 @@ class SMTPProvider(EmailProvider):
         inline_attachments: list[dict] | None = None,
     ) -> None:
         """Send an email with HTML + inline images."""
-
         # Top-level container
         msg = MIMEMultipart("related")
         msg["Subject"] = subject

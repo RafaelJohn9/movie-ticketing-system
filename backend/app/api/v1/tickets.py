@@ -19,10 +19,11 @@ from app.notifications.email.email_service import email_service
 from app.repositories.payment_repository import PaymentRepository
 from app.schemas import SendTicketRequest, TicketPurchase, TicketRead
 from app.services import MpesaService, TicketService, UserService
-from app.utils.enums import PaymentStatus, TicketType
 from app.services.qr_service import QRService
+from app.utils.enums import PaymentStatus, TicketType
 
-ticket_router = APIRouter()
+ticket_router = APIRouter(tags=["tickets"])
+
 logger = get_logger(__name__)
 
 # ---------------------------------------------------------------------------

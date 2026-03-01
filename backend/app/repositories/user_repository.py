@@ -47,3 +47,27 @@ class UserRepository:
         for field, value in kwargs.items():
             query = query.filter(getattr(User, field) == value)
         return query.first()
+
+    @staticmethod
+    async def get_filtered(db: Session, **filters) -> list[User]:
+        """Retrieve users with specified filters."""
+        query = db.query(User)
+        for field, value in filters.items():
+            if hasattr(User, field):
+                query = query.filter(getattr(User, field) == value)
+        return query.all()
+
+    @staticmethod
+    async def update(db: Session, user_id: str, **kwargs) -> User | None:
+        """Update a user by ID."""
+        user = db.query(User).filter(User.id == user_id).first()
+        if not user:
+            return None
+
+        for field, value in kwargs.items():
+            if hasattr(user, field):
+                setattr(user, field, value)
+
+        db.commit()
+        db.refresh(user)
+        return user

@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 
 from app.models.ticket import Ticket
 from app.repositories.ticket_repository import TicketRepository
+from app.core.exceptions import ResourceNotFoundError, QRCodeAlreadyScannedError
 
 
 class TicketService:
@@ -29,11 +30,22 @@ class TicketService:
             "ticket_type": ticket_type,
             "status": "active",
             "qr_token": self.generate_qr_token(),
-            "qr_used": False
+            "is_scanned": False
         }
         return await TicketRepository.create(db, ticket_data)
 
 
     async def verify_ticket(self, db: Session, qr_token: str) -> Ticket | None:
         """Verify a ticket using its QR token."""
-        return await TicketRepository.get_by_qr_token(db, qr_token)
+        ticket = await TicketRepository.get_by_qr_token(db, qr_token)
+
+        if not ticket:
+            ResourceNotFoundError("Ticket does not exist.")
+
+        if ticket.is_scanned:
+            raise QRCodeAlreadyScannedError("This QR code has already been scanned.")
+
+        ticket = await TicketRepository.update(
+            db, ticket.id, is_scanned=True)
+
+        return ticket

@@ -26,8 +26,7 @@ class EmailService:
         qr_code_b64: str,
         ticket_type: str,
     ) -> None:
-        """
-        Send movie ticket email with embedded QR code (CID).
+        """Send movie ticket email with embedded QR code (CID).
 
         Args:
             to: Recipient email address.

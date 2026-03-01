@@ -48,7 +48,7 @@ class TokenManager:
 
 
 # Pre-configured TokenManagers for different token types
-auth_session_manager = TokenManager(TokenType.AUTH_SESSION, expires_in=3600)
+auth_session_manager = TokenManager(TokenType.AUTH_SESSION, expires_in=settings.access_token_expires_in)
 email_verification_manager = TokenManager(
     TokenType.EMAIL_VERIFICATION, expires_in=600
 )

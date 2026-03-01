@@ -6,6 +6,10 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     """Application settings using Pydantic BaseSettings."""
 
+    # Project metadata.
+    project_name: str = "Movie Ticketing System"
+    version: str = "0.1.0"
+
     # Core
     database_url: str
     jwt_secret_key: str="supersecretkey"
@@ -38,6 +42,23 @@ class Settings(BaseSettings):
         "env_file": ".env",
         "env_file_encoding": "utf-8",
     }
+
+    # CORS settings
+    cors_origins: list[str] = [
+        "http://localhost:5173",
+        "https://rafaeljohn9.github.io",
+        "https://rafaeljohn9.github.io/movie-ticketing-system",
+        "https://tickets.mutcu.org",
+    ]
+
+    # Access Token settings
+    access_token_expires_in: int = 21600  # 6 hours in seconds
+
+    # Admin credentials
+    admin_email: str
+    admin_password: str
+    admin_phone_number: str
+    admin_full_name: str = "Admin User"
 
 
 settings = Settings()
