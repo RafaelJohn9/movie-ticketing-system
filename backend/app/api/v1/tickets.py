@@ -140,6 +140,8 @@ async def _send_ticket_email(
     qr_image = qr_service.generate_qr_base64(qr_token)
     await email_service.send_ticket_email(
         to=email,
+        full_name=ticket.user.full_name,
+        phone_number=ticket.user.phone_number,
         ticket_id=ticket_id,
         qr_code_b64=qr_image,
         ticket_type=ticket_type

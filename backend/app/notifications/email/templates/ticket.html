@@ -1,20 +1,264 @@
 {% extends "base.html" %}
 
-{% block title %}Your Movie Ticket{% endblock %}
-
 {% block content %}
-<h2>Your Movie Ticket</h2>
-<p>Thank you for your purchase! Here are the details of your ticket:</p>
 
-<div class="ticket-type" style="font-weight: bold; font-size: 1.5em; margin-top: 10px; color: #3c6cf1;">Ticket Type: {{ ticket_type }}</div>
-<div class="ticket-id" style="font-weight: bold; font-size: 0.8em; margin-top: 10px;">Ticket ID: {{ ticket_id }}</div>
+  <!-- Greeting -->
+  <h2 style="
+    margin: 0 0 6px;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 22px;
+    font-weight: bold;
+    color: #0B1D3A;
+    line-height: 1.3;
+  ">Your ticket is confirmed 🎬</h2>
 
-<p>Scan the QR code below to access your ticket:</p>
-<img
-  src="cid:qrcode"
-  alt="QR Code"
-  style="display:block;margin:20px auto;max-width:100%;height:auto"
->
+  <p style="
+    margin: 0 0 24px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    color: #4b5563;
+    line-height: 1.6;
+  ">
+    Hi <strong style="color:#0B1D3A;">{{ full_name }}</strong>, your seat is secured for the
+    MUTCU Film Premiere. Show the QR code below at the entrance gate.
+  </p>
 
-<p>If you have any questions, feel free to reach out to our support team.</p>
+  <!-- ── TICKET CARD ── -->
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+    style="
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #e5e7eb;
+      margin-bottom: 28px;
+    ">
+
+    <!-- Ticket header band -->
+    <tr>
+      <td style="
+        background-color: #0B1D3A;
+        padding: 14px 20px;
+      ">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            <td style="
+              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+              font-size: 10px;
+              font-weight: bold;
+              letter-spacing: 0.15em;
+              text-transform: uppercase;
+              color: #14b8a8;
+            ">Event Pass</td>
+            <td align="right">
+              <!-- Ticket type chip -->
+              {% if ticket_type == 'VIP' %}
+                <span style="
+                  display:inline-block;padding:3px 10px;border-radius:999px;
+                  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+                  font-size:10px;font-weight:bold;letter-spacing:0.08em;text-transform:uppercase;
+                  background-color:rgba(232,113,10,0.2);color:#f59332;
+                  border:1px solid rgba(232,113,10,0.4);
+                ">VIP</span>
+              {% elif ticket_type == 'Group' %}
+                <span style="
+                  display:inline-block;padding:3px 10px;border-radius:999px;
+                  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+                  font-size:10px;font-weight:bold;letter-spacing:0.08em;text-transform:uppercase;
+                  background-color:rgba(220,38,38,0.2);color:#f87171;
+                  border:1px solid rgba(220,38,38,0.4);
+                ">Group</span>
+              {% else %}
+                <span style="
+                  display:inline-block;padding:3px 10px;border-radius:999px;
+                  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+                  font-size:10px;font-weight:bold;letter-spacing:0.08em;text-transform:uppercase;
+                  background-color:rgba(13,148,136,0.2);color:#14b8a8;
+                  border:1px solid rgba(13,148,136,0.4);
+                ">Regular</span>
+              {% endif %}
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+
+    <!-- Perforation row -->
+    <tr>
+      <td style="
+        background-color: #f3f4f6;
+        height: 1px;
+        padding: 0;
+        border-top: 1px dashed #d1d5db;
+        border-bottom: 1px dashed #d1d5db;
+        line-height: 0;
+        font-size: 0;
+      ">&nbsp;</td>
+    </tr>
+
+    <!-- Ticket body: details left, QR right -->
+    <tr>
+      <td style="background-color:#fafafa;padding:20px;">
+
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+          class="ticket-grid">
+          <tr>
+            <!-- Left: attendee details -->
+            <td valign="top" style="padding-right:20px;" class="ticket-col">
+
+              <!-- Attendee -->
+              <div style="margin-bottom:14px;">
+                <div style="
+                  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+                  font-size:9px;font-weight:bold;letter-spacing:0.1em;text-transform:uppercase;
+                  color:#9ca3af;margin-bottom:3px;
+                ">Attendee</div>
+                <div style="
+                  font-family:Georgia,'Times New Roman',serif;
+                  font-size:16px;font-weight:bold;color:#0B1D3A;
+                ">{{ full_name }}</div>
+              </div>
+
+              <!-- Phone -->
+              <div style="margin-bottom:14px;">
+                <div style="
+                  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+                  font-size:9px;font-weight:bold;letter-spacing:0.1em;text-transform:uppercase;
+                  color:#9ca3af;margin-bottom:3px;
+                ">Phone</div>
+                <div style="
+                  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+                  font-size:14px;color:#374151;font-weight:500;
+                ">{{ phone_number }}</div>
+              </div>
+
+              <!-- Ticket ID -->
+              <div style="margin-bottom:14px;">
+                <div style="
+                  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+                  font-size:9px;font-weight:bold;letter-spacing:0.1em;text-transform:uppercase;
+                  color:#9ca3af;margin-bottom:3px;
+                ">Ticket ID</div>
+                <div style="
+                  font-family:'Courier New',Courier,monospace;
+                  font-size:11px;color:#6b7280;word-break:break-all;
+                ">{{ ticket_id }}</div>
+              </div>
+
+              <!-- Divider -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
+                style="margin:16px 0;">
+                <tr>
+                  <td style="background-color:#e5e7eb;height:1px;line-height:0;font-size:0;">&nbsp;</td>
+                </tr>
+              </table>
+
+              <!-- Event details -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="padding-right:8px;font-size:14px;">📍</td>
+                  <td style="
+                    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+                    font-size:12px;color:#374151;line-height:1.5;
+                  ">Assembly Hall<br/>
+                    <span style="color:#6b7280;">Murang'a University of Technology</span>
+                  </td>
+                </tr>
+                <tr><td colspan="2" style="height:8px;"></td></tr>
+                <tr>
+                  <td style="padding-right:8px;font-size:14px;">🗓</td>
+                  <td style="
+                    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+                    font-size:12px;color:#374151;line-height:1.5;
+                  ">9th March 2025<br/>
+                    <span style="color:#6b7280;">7:00 PM – 10:00 PM</span>
+                  </td>
+                </tr>
+              </table>
+
+            </td>
+
+            <!-- Right: QR code -->
+            <td valign="top" align="center" width="160"
+              style="width:160px;padding-top:0;" class="ticket-col qr-cell">
+              <div style="
+                background:#ffffff;
+                border-radius:10px;
+                padding:10px;
+                border:1px solid #e5e7eb;
+                display:inline-block;
+              ">
+                <img src="cid:qrcode"
+                  alt="Entry QR Code"
+                  width="140" height="140"
+                  style="display:block;width:140px;height:140px;border:0;" />
+              </div>
+              <div style="
+                margin-top:8px;
+                font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+                font-size:10px;color:#9ca3af;text-align:center;letter-spacing:0.05em;
+              ">SCAN AT ENTRANCE</div>
+            </td>
+
+          </tr>
+        </table>
+
+      </td>
+    </tr>
+
+    <!-- Bottom colour bar -->
+    <tr>
+      <td style="padding:0;height:4px;line-height:0;font-size:0;">
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
+          style="height:4px;">
+          <tr>
+            <td style="background-color:#E8710A;width:25%;height:4px;"></td>
+            <td style="background-color:#0D9488;width:25%;height:4px;"></td>
+            <td style="background-color:#DC2626;width:25%;height:4px;"></td>
+            <td style="background-color:#1a3260;width:25%;height:4px;"></td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+
+  </table>
+  <!-- /ticket card -->
+
+  <!-- Instructions -->
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+    style="
+      background-color:#f0fdf9;
+      border-radius:10px;
+      border:1px solid #99f6e4;
+      margin-bottom:24px;
+    ">
+    <tr>
+      <td style="padding:16px 18px;">
+        <p style="
+          margin:0 0 8px;
+          font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+          font-size:13px;font-weight:600;color:#0f766e;
+        ">📋 Before you arrive</p>
+        <ul style="
+          margin:0;padding-left:18px;
+          font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+          font-size:13px;color:#374151;line-height:1.8;
+        ">
+          <li>Save this email or download your ticket PNG for offline access</li>
+          <li>Arrive at the Assembly Hall by <strong>6:45 PM</strong> for smooth entry</li>
+          <li>Have your QR code ready — staff will scan it at the gate</li>
+          <li>Each QR code is single-use and tied to your registration</li>
+        </ul>
+      </td>
+    </tr>
+  </table>
+
+  <!-- Closing line -->
+  <p style="
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+    font-size:14px;color:#6b7280;line-height:1.6;text-align:center;
+  ">
+    Questions? Reply to this email or call
+    <a href="tel:+254707897640" style="color:#0D9488;text-decoration:none;font-weight:600;">+254 707 897 640</a>
+  </p>
+
 {% endblock %}
