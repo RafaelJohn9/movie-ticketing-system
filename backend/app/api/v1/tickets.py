@@ -123,7 +123,7 @@ async def _initiate_and_poll(
 
 
 async def _send_ticket_email(
-    email: str,
+    user: User,
     ticket_id: str,
     qr_token: str,
     ticket_type: TicketType,
@@ -139,9 +139,9 @@ async def _send_ticket_email(
     """
     qr_image = qr_service.generate_qr_base64(qr_token)
     await email_service.send_ticket_email(
-        to=email,
-        full_name=ticket.user.full_name,
-        phone_number=ticket.user.phone_number,
+        to=user.email,
+        full_name=user.full_name,
+        phone_number=user.phone_number,
         ticket_id=ticket_id,
         qr_code_b64=qr_image,
         ticket_type=ticket_type
@@ -183,7 +183,7 @@ async def _handle_existing_user(
             logger.info("No existing ticket for user: %s — generating now.", user.full_name)
             ticket = await ticket_service.create_ticket(db, user.id, ticket_purchase.ticket_type)
 
-        await _send_ticket_email(user.email, ticket.id, ticket.qr_token, ticket.ticket_type, qr_service)
+        await _send_ticket_email(user, ticket.id, ticket.qr_token, ticket.ticket_type, qr_service)
 
         return {
             "full_name": user.full_name,
@@ -405,7 +405,7 @@ async def send_ticket(body: SendTicketRequest, db: Session = Depends(get_db)):
 
         ticket = await ticket_service.create_ticket(db, user.id, ticket_type)
 
-    await _send_ticket_email(user.email, ticket.id, ticket.qr_token, ticket.ticket_type, qr_service)
+    await _send_ticket_email(user, ticket.id, ticket.qr_token, ticket.ticket_type, qr_service)
     logger.info("Ticket email dispatched for user: %s", user.full_name)
 
     return {"message": f"Ticket sent successfully to {user.email}."}
