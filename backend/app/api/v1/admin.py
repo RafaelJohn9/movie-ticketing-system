@@ -39,8 +39,8 @@ async def login_admin(
         value=access_token,
         httponly=True,
         path="/",
-        secure=False,
-        samesite="lax",
+        secure=True,
+        samesite="none",
     )
 
 
